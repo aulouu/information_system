@@ -3,6 +3,8 @@ package itmo.aulouu.is_lab1.service;
 import itmo.aulouu.is_lab1.Pagification;
 import itmo.aulouu.is_lab1.dao.*;
 import itmo.aulouu.is_lab1.dto.coordinates.*;
+import itmo.aulouu.is_lab1.dto.location.LocationDTO;
+import itmo.aulouu.is_lab1.dto.person.PersonDTO;
 import itmo.aulouu.is_lab1.exceptions.CoordinatesAlreadyExistException;
 import itmo.aulouu.is_lab1.exceptions.CoordinatesNotFoundException;
 import itmo.aulouu.is_lab1.exceptions.ForbiddenException;
@@ -37,7 +39,7 @@ public class CoordinatesService {
                   coordinates1.getX(),
                   coordinates1.getY(),
                   coordinates1.getAdminCanModify(),
-                  coordinates1.getUser().getId()))
+                  coordinates1.getUser().getUsername()))
             .sorted(new Comparator<CoordinatesDTO>() {
                @Override
                public int compare(CoordinatesDTO o1, CoordinatesDTO o2) {
@@ -71,7 +73,7 @@ public class CoordinatesService {
             coordinates.getX(),
             coordinates.getY(),
             coordinates.getAdminCanModify(),
-            coordinates.getUser().getId());
+            coordinates.getUser().getUsername());
    }
 
    public CoordinatesDTO alterCoordinate(Long coordinatesId, AlterCoordinatesDTO alterCoordinatesDTO,
@@ -95,7 +97,7 @@ public class CoordinatesService {
             coordinates.getX(),
             coordinates.getY(),
             coordinates.getAdminCanModify(),
-            coordinates.getUser().getId());
+            coordinates.getUser().getUsername());
    }
 
    public void deleteCoordinates(Long coordinatesId, HttpServletRequest request) {

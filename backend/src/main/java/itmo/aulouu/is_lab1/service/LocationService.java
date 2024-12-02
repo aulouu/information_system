@@ -39,7 +39,7 @@ public class LocationService {
                   location1.getZ(),
                   location1.getName(),
                   location1.getAdminCanModify(),
-                  location1.getUser().getId()))
+                  location1.getUser().getUsername()))
             .sorted(new Comparator<LocationDTO>() {
                @Override
                public int compare(LocationDTO o1, LocationDTO o2) {
@@ -50,13 +50,15 @@ public class LocationService {
    }
 
    public LocationDTO createLocation(CreateLocationDTO createLocationDTO, HttpServletRequest request) {
-      if (locationRepository.existsByXAndYAndZAndName(
+      if (locationRepository.existsByName(createLocationDTO.getName()))
+         throw new LocationAlreadyExistException(String.format("Location %s already exists",
+                 createLocationDTO.getName()));
+      if (locationRepository.existsByXAndYAndZ(
             createLocationDTO.getX(),
             createLocationDTO.getY(),
-            createLocationDTO.getZ(),
-            createLocationDTO.getName()))
-         throw new LocationAlreadyExistException(String.format("Location %s %.3f %d %.3f already exist",
-         createLocationDTO.getName(),createLocationDTO.getX(), createLocationDTO.getY(), createLocationDTO.getZ()));
+            createLocationDTO.getZ()))
+         throw new LocationAlreadyExistException(String.format("Location %.3f %d %.3f already exist",
+              createLocationDTO.getX(), createLocationDTO.getY(), createLocationDTO.getZ()));
 
       User user = findUserByRequest(request);
 
@@ -79,7 +81,7 @@ public class LocationService {
             location.getZ(),
             location.getName(),
             location.getAdminCanModify(),
-            location.getUser().getId());
+            location.getUser().getUsername());
    }
 
    public LocationDTO alterLocation(Long locationId, AlterLocationDTO alterLocationDTO,
@@ -109,7 +111,7 @@ public class LocationService {
             location.getZ(),
             location.getName(),
             location.getAdminCanModify(),
-            location.getUser().getId());
+            location.getUser().getUsername());
    }
 
    public void deleteLocation(Long locationId, HttpServletRequest request) {

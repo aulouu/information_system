@@ -14,14 +14,14 @@ interface Location {
     y: number;
     z: number;
     adminCanModify: boolean;
-    userId: number;
+    userName: string;
 };
 
 export type LocationsArray = Location[];
 
 export default function LocationsTable() {
     const dispatch = useDispatch<AppDispatch>();
-    const { locations, isFetching, locationPage } = useSelector(appSelector);
+    const { locations, isFetching, locationPage, isAuth } = useSelector(appSelector);
     const [openCreate, setOpenCreate] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
     const [filters, setFilters] = useState<{ [key: string]: string }>({});
@@ -112,10 +112,10 @@ export default function LocationsTable() {
         return (
             <>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
-                    <div>
+                    {isAuth && <div>
                         <StyleButton text="Create location" onclick={handleOpenCreate} disabled={isFetching} type="button" />
                         <LocationForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>
+                    </div>}
                     <TableContainer className='main__table-container' >
                         <Table className="main__table" aria-label="data table" sx={{ maxWidth: '100%', overflowX: 'auto' }}>
                             <TableHead>
@@ -126,7 +126,7 @@ export default function LocationsTable() {
                                     {renderTableHeader('y', 'Y')}
                                     {renderTableHeader('z', 'Z')}
                                     {renderTableHeader('adminCanModify', 'Admin Can Modify')}
-                                    {renderTableHeader('userId', 'User ID')}
+                                    {renderTableHeader('user', 'User')}
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
@@ -140,7 +140,7 @@ export default function LocationsTable() {
                                         <TableCell>{String(row.y)}</TableCell>
                                         <TableCell>{String(row.z)}</TableCell>
                                         <TableCell>{String(row.adminCanModify)}</TableCell>
-                                        <TableCell>{String(row.userId)}</TableCell>
+                                        <TableCell>{String(row.userName)}</TableCell>
                                         <TableCell><div>
                                             <StyleButton text="Update" onclick={(e) => handleOpenUpdate(row)} disabled={isFetching} type="button" />
                                             <LocationUpdateForm open={openUpdate} onClose={handleCloseUpdate} />
@@ -180,10 +180,10 @@ export default function LocationsTable() {
         return (
             <>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
-                    <div>
+                    {isAuth && <div>
                         <StyleButton text="Create location" onclick={handleOpenCreate} disabled={isFetching} type="button" />
                         <LocationForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>
+                    </div>}
                     <TableContainer className='main__table-container' sx={{ maxWidth: '100%', overflowX: 'auto' }}>
                         <Table className="main__table" aria-label="data table">
                             <TableHead>
@@ -194,7 +194,7 @@ export default function LocationsTable() {
                                     <TableCell>Y</TableCell>
                                     <TableCell>Z</TableCell>
                                     <TableCell>Admin Can Modify</TableCell>
-                                    <TableCell>User ID</TableCell>
+                                    <TableCell>User</TableCell>
                                 </TableRow>
                             </TableHead>
                         </Table>

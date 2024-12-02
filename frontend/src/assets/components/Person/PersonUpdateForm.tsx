@@ -182,7 +182,7 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({ open, onClose }) => {
                    name="coordinatesId"
                    autoComplete="coordinatesId"
                    autoFocus
-                   label="Coordinates ID"
+                   label="Coordinates"
                    defaultValue={""}
                    value={formData.coordinatesId}
                    onChange={handleChange}
@@ -190,7 +190,7 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({ open, onClose }) => {
                    sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
                >{coordinates !== undefined ? coordinates.map((option) => (
                    <MenuItem key={option.id} value={option.id}>
-                      {option.id}
+                      {`(${option.x};${option.y})`}
                    </MenuItem>)) : ''}
                </TextField>
 
@@ -252,7 +252,7 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({ open, onClose }) => {
                    name="locationId"
                    autoComplete="locationId"
                    autoFocus
-                   label="Location ID"
+                   label="Location"
                    defaultValue={""}
                    value={formData.locationId}
                    onChange={handleChange}
@@ -260,7 +260,7 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({ open, onClose }) => {
                    sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
                >{locations !== undefined ? locations.map((option) => (
                    <MenuItem key={option.id} value={option.id}>
-                      {option.id}
+                      {option.name}
                    </MenuItem>)) : ''}
                </TextField>
 

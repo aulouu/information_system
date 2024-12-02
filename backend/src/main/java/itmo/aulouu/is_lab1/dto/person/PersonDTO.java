@@ -28,5 +28,5 @@ public class PersonDTO {
    private Date birthday;
    private Country nationality;
    private Boolean adminCanModify;
-   private Long userId;
+   private String userName;
 }

@@ -161,7 +161,7 @@ export default function Graph({ points, persons }: { points: number[][], persons
             const colorMap: { [key: number]: string } = {};
             points.forEach(point => {
                 if (!colorMap[point[3]]) {
-                    colorMap[point[3]] = `hsl(${point[3] * 30}, 100%, 50%)`;
+                    colorMap[point[3]] = `hsl(${point[3] * 20}, 100%, 50%)`;
                 }
 
                 ctx.fillStyle = colorMap[point[3]];

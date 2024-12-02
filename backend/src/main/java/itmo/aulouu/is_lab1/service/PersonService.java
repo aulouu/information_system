@@ -66,6 +66,8 @@ public class PersonService {
     }
 
     public PersonDTO createPerson(CreatePersonDTO createPersonDTO, HttpServletRequest request) {
+        if (personRepository.existsByName(createPersonDTO.getName()))
+            throw new PersonAlreadyExistException(String.format("Person %s already exists", createPersonDTO.getName()));
         Coordinates coordinate = coordinatesRepository.findById(createPersonDTO.getCoordinatesId())
                 .orElseThrow(() -> new CoordinatesNotFoundException(
                         String.format("Coordinates with id %s not found", createPersonDTO.getCoordinatesId())));
@@ -239,7 +241,7 @@ public class PersonService {
                         person.getCoordinates().getX(),
                         person.getCoordinates().getY(),
                         person.getCoordinates().getAdminCanModify(),
-                        person.getCoordinates().getUser().getId()))
+                        person.getCoordinates().getUser().getUsername()))
                 .creationDate(person.getCreationDate())
                 .eyeColor(person.getEyeColor())
                 .hairColor(person.getHairColor())
@@ -250,12 +252,12 @@ public class PersonService {
                         person.getLocation().getZ(),
                         person.getLocation().getName(),
                         person.getLocation().getAdminCanModify(),
-                        person.getLocation().getUser().getId()))
+                        person.getLocation().getUser().getUsername()))
                 .height(person.getHeight())
                 .birthday(person.getBirthday())
                 .nationality(person.getNationality())
                 .adminCanModify(person.getAdminCanModify())
-                .userId(person.getUser().getId())
+                .userName(person.getUser().getUsername())
                 .build();
     }
 

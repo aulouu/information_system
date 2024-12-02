@@ -12,5 +12,5 @@ public class LocationDTO {
    private double z;
    private String name;
    private Boolean adminCanModify;
-   private Long userId;
+   private String userName;
 }

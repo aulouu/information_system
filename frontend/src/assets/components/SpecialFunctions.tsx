@@ -53,7 +53,7 @@ export default function SpecialFunctionsTable() {
             return;
          }
 
-         const link = `http://localhost:8080/person/delete-persons/${removePersonsByHeight}`;
+         const link = `http://localhost:24680/person/delete-persons/${removePersonsByHeight}`;
          let headers = {
 
          }
@@ -96,7 +96,7 @@ export default function SpecialFunctionsTable() {
       await new Promise(resolve => setTimeout(resolve, 100));
       dispatch(setFetching(true));
       try {
-         const link = `http://localhost:8080/person/name/${nameSubstring}`;
+         const link = `http://localhost:24680/person/name/${nameSubstring}`;
 
          const response = await axios.get(link, {});
          const data = response.data;
@@ -136,7 +136,7 @@ export default function SpecialFunctionsTable() {
          const formattedDate = date.format('DD.MM.YYYY');
          console.log("Formatted Date:", formattedDate);
          console.log("Type of formattedDate:", typeof formattedDate);
-         const link = `http://localhost:8080/person/birthday/${formattedDate}`;
+         const link = `http://localhost:24680/person/birthday/${formattedDate}`;
 
          const response = await axios.get(link, {});
          const data = response.data;
@@ -173,7 +173,7 @@ export default function SpecialFunctionsTable() {
             dispatch(setFetching(false));
             return;
          }
-         const link = `http://localhost:8080/person/hairColor/equals/${hairColorCount}`;
+         const link = `http://localhost:24680/person/hairColor/equals/${hairColorCount}`;
 
          const response = await axios.get(link, {});
          const data = response.data;
@@ -206,7 +206,7 @@ export default function SpecialFunctionsTable() {
             dispatch(setFetching(false));
             return;
          }
-         const link = `http://localhost:8080/person/eyeColor/equals/${eyeColorCount}`;
+         const link = `http://localhost:24680/person/eyeColor/equals/${eyeColorCount}`;
 
          const response = await axios.get(link, {});
          const data = response.data;

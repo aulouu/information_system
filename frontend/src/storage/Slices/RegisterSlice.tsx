@@ -25,7 +25,7 @@ export const signupUser = createAsyncThunk<
     "users/signupUser",
     async ({ username, password }, thunkAPI) => {
         try {
-            const link = "http://localhost:8080/auth/register";
+            const link = "http://localhost:24680/auth/register";
             const params = {
                 username,
                 password

@@ -42,7 +42,7 @@ public class Person implements Serializable{
    private Color hairColor;
 
    @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "location_id")
+   @JoinColumn(name = "location_id", nullable = false)
    private Location location;
 
    @Column(name = "height", nullable = false)

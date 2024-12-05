@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +51,7 @@ public class CoordinatesService {
             .toList();
    }
 
+   @Transactional
    public CoordinatesDTO createCoordinate(CreateCoordinatesDTO createCoordinatesDTO, HttpServletRequest request) {
       if (coordinatesRepository.existsByXAndY(
             createCoordinatesDTO.getX(),
@@ -76,6 +79,7 @@ public class CoordinatesService {
             coordinates.getUser().getUsername());
    }
 
+   @Transactional
    public CoordinatesDTO alterCoordinate(Long coordinatesId, AlterCoordinatesDTO alterCoordinatesDTO,
          HttpServletRequest request) {
       Coordinates coordinates = coordinatesRepository.findById(coordinatesId)
@@ -100,6 +104,7 @@ public class CoordinatesService {
             coordinates.getUser().getUsername());
    }
 
+   @Transactional
    public void deleteCoordinates(Long coordinatesId, HttpServletRequest request) {
       Coordinates coordinates = coordinatesRepository.findById(coordinatesId)
             .orElseThrow(() -> new CoordinatesNotFoundException(
@@ -117,12 +122,16 @@ public class CoordinatesService {
    private User findUserByRequest(HttpServletRequest request) {
       String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
       System.out.println("Username: " + username);
-      return userRepository.findByUsername(username).get();
+      return userRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                      String.format("Username %s not found", username)));
    }
 
    private boolean checkPermission(Coordinates coordinates, HttpServletRequest request) {
       String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-      User fromUser = userRepository.findByUsername(username).get();
+      User fromUser = userRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                      String.format("Username %s not found", username)));
       return coordinates.getUser().getUsername().equals(username) || fromUser.getRole() == Role.ADMIN &&
             coordinates.getAdminCanModify();
    }

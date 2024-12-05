@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +51,7 @@ public class LocationService {
             .toList();
    }
 
+   @Transactional
    public LocationDTO createLocation(CreateLocationDTO createLocationDTO, HttpServletRequest request) {
       if (locationRepository.existsByName(createLocationDTO.getName()))
          throw new LocationAlreadyExistException(String.format("Location %s already exists",
@@ -84,6 +87,7 @@ public class LocationService {
             location.getUser().getUsername());
    }
 
+   @Transactional
    public LocationDTO alterLocation(Long locationId, AlterLocationDTO alterLocationDTO,
          HttpServletRequest request) {
       Location location = locationRepository.findById(locationId)
@@ -114,6 +118,7 @@ public class LocationService {
             location.getUser().getUsername());
    }
 
+   @Transactional
    public void deleteLocation(Long locationId, HttpServletRequest request) {
       Location location = locationRepository.findById(locationId)
             .orElseThrow(() -> new LocationNotFoundException(
@@ -130,12 +135,16 @@ public class LocationService {
 
    private User findUserByRequest(HttpServletRequest request) {
       String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-      return userRepository.findByUsername(username).get();
+      return userRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                      String.format("Username %s not found", username)));
    }
 
    private boolean checkPermission(Location location, HttpServletRequest request) {
       String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-      User fromUser = userRepository.findByUsername(username).get();
+      User fromUser = userRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                      String.format("Username %s not found", username)));
       return location.getUser().getUsername().equals(username) || fromUser.getRole() == Role.ADMIN &&
             location.getAdminCanModify();
    }

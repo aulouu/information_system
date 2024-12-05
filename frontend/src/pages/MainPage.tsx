@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { appSelector, clearState, getAdminRequest, getCoordinates, getLocation, getPerson, getPersonAll, getUserRole, setCoordinatesPage } from "../storage/Slices/AppSlice";
+import { appSelector, clearState, getAdminRequest, getCoordinates, getLocation, getPerson, getPersonAll, getUserRole, getImport } from "../storage/Slices/AppSlice";
 
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
@@ -20,6 +20,7 @@ import AddLocationIcon from '@mui/icons-material/AddLocation';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MapIcon from '@mui/icons-material/Map';
+import PublishIcon from '@mui/icons-material/Publish';
 import { AppDispatch } from '../storage/store';
 import React, { useEffect } from 'react';
 
@@ -42,7 +43,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
 function MainPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const { coordinatesPage, locationPage, personPage, adminRequestPage, isAuth } = useSelector(appSelector);
+  const { coordinatesPage, locationPage, personPage, adminRequestPage, isAuth, importPage} = useSelector(appSelector);
 
 
   useEffect(() => {
@@ -53,11 +54,12 @@ function MainPage() {
       dispatch(getPerson(personPage));
       dispatch(getPersonAll());
       dispatch(getAdminRequest(adminRequestPage));
+      dispatch(getImport(importPage));
 
       if (localStorage.getItem('username') !== undefined && localStorage.getItem('username') !== null) {
         dispatch(getUserRole(localStorage.getItem('username') as string));
       }
-      const sock = new SockJS("http://localhost:8080/ws");
+      const sock = new SockJS("http://localhost:24680/ws");
       const stompClient = Stomp.over(sock);
       stompClient.connect({
         headers: {
@@ -70,6 +72,7 @@ function MainPage() {
           dispatch(getPerson(personPage));
           dispatch(getPersonAll());
           dispatch(getAdminRequest(adminRequestPage));
+          dispatch(getImport(importPage));
         },
           {
             "Authorization": `Bearer ${localStorage.getItem('token')}`,
@@ -94,7 +97,7 @@ function MainPage() {
         }}>
           <Grid container sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             {isAuth && (
-                <Grid item sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                <Grid item sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                   <ListItemLink to="/app/person" primary="Person" icon={<PersonAddIcon color='primary' />} />
                   <ListItemLink to="/app/location" primary="Location" icon={<AddLocationIcon color='primary' />} />
                   <ListItemLink to="/app/coordinates" primary="Coordinates" icon={<AddLocationAltIcon color='primary' />} />
@@ -104,7 +107,10 @@ function MainPage() {
                 <Grid item sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                   <ListItemLink to="/app/admin" primary="Admin Requests" icon={<AddModeratorIcon color='primary' />} />
                   <ListItemLink to="/app/special" primary="Special Functions" icon={<MoreHorizIcon color='primary' />} />
-                  <ListItemLink to="/app/map" primary="Map" icon={<MapIcon color='primary' />} />
+                  <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <ListItemLink to="/app/import" primary="Import" icon={<PublishIcon color='primary' />} />
+                    <ListItemLink to="/app/map" primary="Map" icon={<MapIcon color='primary' />} />
+                  </Grid>
                 </Grid>
             )}
           </Grid>

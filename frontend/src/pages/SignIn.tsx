@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useMediaQuery, TextField, Link, Box, Container, Snackbar, Alert } from '@mui/material';
 import StyleButton from '../assets/components/StyleButton';
 import { signinUser, signinSelector, clearState } from '../storage/Slices/LoginSlice';
@@ -64,7 +63,7 @@ function SignIn() {
   }
 
   if (isSuccess) {
-    console.log("Registration successful");
+    console.log("Login successful");
     dispatch(clearState());
     navigate('/app');
   }

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -77,11 +78,11 @@ public class AdminService {
       simpMessagingTemplate.convertAndSend("/topic", "Admin Request created");
    }
 
-
    private User findUserByRequest(HttpServletRequest request) {
       String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-      return userRepository.findByUsername(username).get();
+      return userRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                      String.format("Username %s not found", username)));
    }
-
 
 }

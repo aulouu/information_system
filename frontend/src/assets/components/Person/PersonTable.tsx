@@ -1,7 +1,24 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableRow, Table, Box, TextField, SortDirection } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { appSelector, getPerson, IPerson, sendDeletePerson, setPersonPage, setUpdatedPerson } from "../../../storage/Slices/AppSlice";
-import { AppDispatch } from '../../../storage/store';
+import {
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Table,
+    Box,
+    TextField,
+    SortDirection
+} from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    appSelector,
+    getPerson,
+    IPerson,
+    sendDeletePerson,
+    setPersonPage,
+    setUpdatedPerson
+} from "../../../storage/Slices/AppSlice";
+import {AppDispatch} from '../../../storage/store';
 import {useEffect, useState} from 'react';
 import StyleButton from '../StyleButton';
 import PersonForm from './PersonForm';
@@ -42,10 +59,10 @@ export type PersonArray = Person[];
 
 export default function PersonTable() {
     const dispatch = useDispatch<AppDispatch>();
-    const { persons, isFetching, personPage, isAuth } = useSelector(appSelector);
+    const {persons, isFetching, personPage, isAuth} = useSelector(appSelector);
     const [openCreate, setOpenCreate] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
-    const [filters, setFilters] = useState<{[key: string]: string}>({});
+    const [filters, setFilters] = useState<{ [key: string]: string }>({});
     const [activeColumn, setActiveColumn] = useState<string | null>(null);
     const [sortConfig, setSortConfig] = useState<{ field: keyof Person | null; direction: SortDirection }>({
         field: null,
@@ -73,7 +90,7 @@ export default function PersonTable() {
 
     const handleDelete = (person: IPerson) => {
         const timer = setTimeout(() => {
-            dispatch(sendDeletePerson({ id: person.id }));
+            dispatch(sendDeletePerson({id: person.id}));
         }, 50);
 
     };
@@ -81,7 +98,7 @@ export default function PersonTable() {
     const handleColumnClick = (columnName: string) => {
         setActiveColumn(activeColumn === columnName ? null : columnName);
         if (activeColumn === columnName) {
-            const newFilters = { ...filters };
+            const newFilters = {...filters};
             delete newFilters[columnName];
             setFilters(newFilters);
             return;
@@ -172,39 +189,40 @@ export default function PersonTable() {
         return `(${coordinates.x}, ${coordinates.y})`;
     };
 
-    if (persons !== undefined && persons.length > 0) {
-        return (
-            <>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflowX: 'hidden',
-                    flexDirection: 'column' }}>
-                    {isAuth && <div>
-                        <StyleButton text="Create person" onclick={handleOpenCreate} disabled={isFetching} type="button" />
-                        <PersonForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>}
-                    <TableContainer className='main__table-container' >
-                        <Table className="main__table" aria-label="data table" sx={{ maxWidth: '100%', overflowX: 'auto' }}>
-                            <TableHead>
-                                <TableRow>
-                                    {renderTableHeader('id', 'ID')}
-                                    {renderTableHeader('name', 'Name')}
-                                    {renderTableHeader('coordinates', 'Coordinates')}
-                                    {renderTableHeader('creationDate', 'Creation Date')}
-                                    {renderTableHeader('eyeColor', 'Eye Color')}
-                                    {renderTableHeader('hairColor', 'Hair Color')}
-                                    {renderTableHeader('location', 'Location')}
-                                    {renderTableHeader('height', 'Height')}
-                                    {renderTableHeader('birthday', 'Birthday')}
-                                    {renderTableHeader('nationality', 'Nationality')}
-                                    {renderTableHeader('adminCanModify', 'Admin Can Modify')}
-                                    {renderTableHeader('user', 'User')}
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                </TableRow>
-                            </TableHead>
+    return (
+        <>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflowX: 'hidden',
+                flexDirection: 'column'
+            }}>
+                {isAuth && <div>
+                    <StyleButton text="Create person" onclick={handleOpenCreate} disabled={isFetching} type="button"/>
+                    <PersonForm open={openCreate} onClose={handleCloseCreate}/>
+                </div>}
+                <TableContainer className='main__table-container'>
+                    <Table className="main__table" aria-label="data table" sx={{maxWidth: '100%', overflowX: 'auto'}}>
+                        <TableHead>
+                            <TableRow>
+                                {renderTableHeader('id', 'ID')}
+                                {renderTableHeader('name', 'Name')}
+                                {renderTableHeader('coordinates', 'Coordinates')}
+                                {renderTableHeader('creationDate', 'Creation Date')}
+                                {renderTableHeader('eyeColor', 'Eye Color')}
+                                {renderTableHeader('hairColor', 'Hair Color')}
+                                {renderTableHeader('location', 'Location')}
+                                {renderTableHeader('height', 'Height')}
+                                {renderTableHeader('birthday', 'Birthday')}
+                                {renderTableHeader('nationality', 'Nationality')}
+                                {renderTableHeader('adminCanModify', 'Admin Can Modify')}
+                                {renderTableHeader('user', 'User')}
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        {persons !== undefined && persons.length > 0 &&
                             <TableBody>
                                 {sortedAndFilteredPersons.map((row, i) => (
                                     <TableRow key={i}>
@@ -220,96 +238,52 @@ export default function PersonTable() {
                                         <TableCell>{String(row.nationality)}</TableCell>
                                         <TableCell>{String(row.adminCanModify)}</TableCell>
                                         <TableCell>{String(row.userName)}</TableCell>
-                                        <TableCell><div>
-                                            <StyleButton text="Update" onclick={(e) => handleOpenUpdate(row)} disabled={isFetching} type="button" />
-                                            <PersonUpdateForm open={openUpdate} onClose={handleCloseUpdate} />
-                                        </div></TableCell>
-                                        <TableCell><StyleButton text="Delete" onclick={(e) => handleDelete(row)} disabled={isFetching} type="button" /></TableCell>
+                                        <TableCell>
+                                            <div>
+                                                <StyleButton text="Update" onclick={(e) => handleOpenUpdate(row)}
+                                                             disabled={isFetching} type="button"/>
+                                                <PersonUpdateForm open={openUpdate} onClose={handleCloseUpdate}/>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell><StyleButton text="Delete" onclick={(e) => handleDelete(row)}
+                                                                disabled={isFetching} type="button"/></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
+                        }
+                    </Table>
+                </TableContainer>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
+
+                    <StyleButton text="Previous Page"
+                                 disabled={isFetching || personPage === 0}
+                                 type="button"
+                                 onclick={() => {
+                                     if (personPage > 0) {
+                                         dispatch(setPersonPage(personPage - 1));
+                                         dispatch(getPerson(personPage - 1))
+                                     }
+                                 }}/>
+                    <label style={{
+                        fontFamily: "Undertale",
+                        backgroundColor: '#855666',
+                        color: '#332127'
                     }}>
-
-                        <StyleButton text="Previous Page"
-                            disabled={isFetching || personPage === 0}
-                            type="button"
-                            onclick={() => { if (personPage > 0) { dispatch(setPersonPage(personPage - 1)); dispatch(getPerson(personPage - 1)) } }} />
-                        <label style={{
-                            fontFamily: "Undertale",
-                            backgroundColor: '#855666',
-                            color: '#332127'
-                        }}>
-                            {personPage}
-                        </label>
-                        <StyleButton text="Next Page"
-                            disabled={isFetching}
-                            type="button"
-                            onclick={() => { dispatch(setPersonPage(personPage + 1)); dispatch(getPerson(personPage + 1)) }} />
-                    </Box>
+                        {personPage}
+                    </label>
+                    <StyleButton text="Next Page"
+                                 disabled={isFetching}
+                                 type="button"
+                                 onclick={() => {
+                                     dispatch(setPersonPage(personPage + 1));
+                                     dispatch(getPerson(personPage + 1))
+                                 }}/>
                 </Box>
-            </>
-
-        );
-    } else {
-        return (
-            <>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
-                    {isAuth && <div>
-                        <StyleButton text="Create person" onclick={handleOpenCreate} disabled={isFetching} type="button" />
-                        <PersonForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>}
-                    <TableContainer className='main__table-container' sx={{ maxWidth: '100%', overflowX: 'auto' }}>
-                        <Table className="main__table" aria-label="data table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Coordinates</TableCell>
-                                    <TableCell>Creation Date</TableCell>
-                                    <TableCell>Eye Color</TableCell>
-                                    <TableCell>Hair Color</TableCell>
-                                    <TableCell>Location</TableCell>
-                                    <TableCell>Height</TableCell>
-                                    <TableCell>Birthday</TableCell>
-                                    <TableCell>Country</TableCell>
-                                    <TableCell>Admin Can Modify</TableCell>
-                                    <TableCell>User</TableCell>
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    </TableContainer>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}>
-
-                        <StyleButton text="Previous Page"
-                            disabled={isFetching || personPage === 0}
-                            type="button"
-                            onclick={() => { if (personPage > 0) { dispatch(setPersonPage(personPage - 1)); dispatch(getPerson(personPage - 1)) } }} />
-                        <label style={{
-                            fontFamily: "Undertale",
-                            backgroundColor: '#855666',
-                            color: '#332127'
-                        }}>
-                            {personPage}
-                        </label>
-                        <StyleButton text="Next Page"
-                            disabled={isFetching}
-                            type="button"
-                            onclick={() => { dispatch(setPersonPage(personPage + 1)); dispatch(getPerson(personPage + 1)) }} />
-                    </Box>
-                </Box>
-            </>
-        );
-    }
+            </Box>
+        </>
+    );
 }
-
-

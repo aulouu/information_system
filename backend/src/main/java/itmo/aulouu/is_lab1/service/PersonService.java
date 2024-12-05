@@ -9,12 +9,15 @@ import itmo.aulouu.is_lab1.model.*;
 import itmo.aulouu.is_lab1.security.jwt.JwtUtils;
 import itmo.aulouu.is_lab1.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +31,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class, propagation = Propagation.NESTED)
 public class PersonService {
     private final PersonRepository personRepository;
     private final CoordinatesRepository coordinatesRepository;
@@ -156,7 +160,6 @@ public class PersonService {
         simpMessagingTemplate.convertAndSend("/topic", "Person deleted");
     }
 
-    @Transactional
     public void deleteAllPersonsByHeight(Integer value, HttpServletRequest request) {
         List<Person> persons = personRepository.findAllPersonsByHeight(value);
         if (jwtUtils.parseJwt(request) == null || jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request)) == null)
@@ -263,12 +266,16 @@ public class PersonService {
 
     private User findUserByRequest(HttpServletRequest request) {
         String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-        return userRepository.findByUsername(username).get();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format("Username %s not found", username)));
     }
 
     private boolean checkPermission(Person person, HttpServletRequest request) {
         String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
-        User fromUser = userRepository.findByUsername(username).get();
+        User fromUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format("Username %s not found", username)));
         return person.getUser().getUsername().equals(username) || fromUser.getRole() == Role.ADMIN &&
                 person.getAdminCanModify();
     }

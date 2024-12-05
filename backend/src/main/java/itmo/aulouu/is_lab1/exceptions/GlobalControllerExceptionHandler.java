@@ -21,6 +21,13 @@ public class GlobalControllerExceptionHandler {
 
    @ExceptionHandler
    @ResponseStatus(HttpStatus.BAD_REQUEST)
+   public ErrorResponse handleNullPointerException(NullPointerException e) {
+      return new ErrorResponse(e.getClass().getCanonicalName(),
+              e.getMessage());
+   }
+
+   @ExceptionHandler
+   @ResponseStatus(HttpStatus.BAD_REQUEST)
    public ErrorResponse handleCoordinatesAlreadyExistException(CoordinatesAlreadyExistException e) {
       return new ErrorResponse(e.getClass().getCanonicalName(),
             e.getMessage());

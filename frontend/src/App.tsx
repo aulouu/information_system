@@ -35,6 +35,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from './storage/store.tsx';
 import SpecialFunctions from './assets/components/SpecialFunctions.tsx';
 import MapPage from './assets/components/Map/MapPage.tsx';
+import ImportFile from './pages/ImportFile.tsx';
 
 interface ListItemLinkProps {
   icon?: React.ReactElement<unknown>;
@@ -119,13 +120,14 @@ function App() {
                       <Route path="/user/signIn" element={<SignIn/>}/>
                       <Route path="/user/register" element={<Register/>}/>
                       <Route path="/app/*" element={<MainPage/>}/>
-                      <Route path="/error" element={<Error/>}/>
                       <Route path="/app/coordinates" element={<CoordinatesTable/>}/>
                       <Route path="/app/location" element={<LocationsTable/>}/>
                       <Route path="/app/person" element={<PersonTable/>}/>
                       <Route path="/app/admin" element={<AdminRequestTable/>}/>
                       <Route path="/app/special" element={<SpecialFunctions/>}/>
                       <Route path="/app/map" element={<MapPage />} />
+                      <Route path="/app/import" element={<ImportFile />} />
+                      <Route path="/error" element={<Error />} />
                   </Routes>
               </Grid>
           </Grid>

@@ -1,8 +1,15 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableRow, Table, Box, TextField } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { appSelector, getLocation, ILocation, sendDeleteLocation, setLocationPage, setUpdatedLocation } from "../../../storage/Slices/AppSlice";
-import { AppDispatch } from '../../../storage/store';
-import { useState } from 'react';
+import {Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField} from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    appSelector,
+    getLocation,
+    ILocation,
+    sendDeleteLocation,
+    setLocationPage,
+    setUpdatedLocation
+} from "../../../storage/Slices/AppSlice";
+import {AppDispatch} from '../../../storage/store';
+import {useState} from 'react';
 import StyleButton from '../StyleButton';
 import LocationForm from './LocationForm';
 import LocationUpdateForm from './LocationUpdateForm';
@@ -21,7 +28,7 @@ export type LocationsArray = Location[];
 
 export default function LocationsTable() {
     const dispatch = useDispatch<AppDispatch>();
-    const { locations, isFetching, locationPage, isAuth } = useSelector(appSelector);
+    const {locations, isFetching, locationPage, isAuth} = useSelector(appSelector);
     const [openCreate, setOpenCreate] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
     const [filters, setFilters] = useState<{ [key: string]: string }>({});
@@ -48,7 +55,7 @@ export default function LocationsTable() {
 
     const handleDelete = (location: ILocation) => {
         const timer = setTimeout(() => {
-            dispatch(sendDeleteLocation({ id: location.id }));
+            dispatch(sendDeleteLocation({id: location.id}));
         }, 50);
 
     };
@@ -56,7 +63,7 @@ export default function LocationsTable() {
     const handleColumnClick = (columnName: string) => {
         setActiveColumn(activeColumn === columnName ? null : columnName);
         if (activeColumn === columnName) {
-            const newFilters = { ...filters };
+            const newFilters = {...filters};
             delete newFilters[columnName];
             setFilters(newFilters);
         }
@@ -83,7 +90,7 @@ export default function LocationsTable() {
     const renderTableHeader = (columnName: string, label: string) => (
         <TableCell
             onClick={() => handleColumnClick(columnName)}
-            style={{ cursor: 'pointer', position: 'relative' }}
+            style={{cursor: 'pointer', position: 'relative'}}
         >
             {label}
             {activeColumn === columnName && (
@@ -106,31 +113,37 @@ export default function LocationsTable() {
     );
 
     const filteredPersons = getFilteredPersons();
-
-
-    if (locations !== undefined && locations.length > 0) {
-        return (
-            <>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
-                    {isAuth && <div>
-                        <StyleButton text="Create location" onclick={handleOpenCreate} disabled={isFetching} type="button" />
-                        <LocationForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>}
-                    <TableContainer className='main__table-container' >
-                        <Table className="main__table" aria-label="data table" sx={{ maxWidth: '100%', overflowX: 'auto' }}>
-                            <TableHead>
-                                <TableRow>
-                                    {renderTableHeader('id', 'ID')}
-                                    {renderTableHeader('name', 'Name')}
-                                    {renderTableHeader('x', 'X')}
-                                    {renderTableHeader('y', 'Y')}
-                                    {renderTableHeader('z', 'Z')}
-                                    {renderTableHeader('adminCanModify', 'Admin Can Modify')}
-                                    {renderTableHeader('user', 'User')}
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                </TableRow>
-                            </TableHead>
+    return (
+        <>
+            {isAuth && <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflowX: 'hidden',
+                flexDirection: 'column'
+            }}>
+                <div>
+                    <StyleButton text="Create location" onclick={handleOpenCreate} disabled={isFetching}
+                                 type="button"/>
+                    <LocationForm open={openCreate} onClose={handleCloseCreate}/>
+                </div>
+                <TableContainer className='main__table-container'>
+                    <Table className="main__table" aria-label="data table"
+                           sx={{maxWidth: '100%', overflowX: 'auto'}}>
+                        <TableHead>
+                            <TableRow>
+                                {renderTableHeader('id', 'ID')}
+                                {renderTableHeader('name', 'Name')}
+                                {renderTableHeader('x', 'X')}
+                                {renderTableHeader('y', 'Y')}
+                                {renderTableHeader('z', 'Z')}
+                                {renderTableHeader('adminCanModify', 'Admin Can Modify')}
+                                {renderTableHeader('user', 'User')}
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        {locations !== undefined && locations.length > 0 &&
                             <TableBody>
                                 {filteredPersons.map((row, i) => (
                                     <TableRow key={i}>
@@ -141,90 +154,54 @@ export default function LocationsTable() {
                                         <TableCell>{String(row.z)}</TableCell>
                                         <TableCell>{String(row.adminCanModify)}</TableCell>
                                         <TableCell>{String(row.userName)}</TableCell>
-                                        <TableCell><div>
-                                            <StyleButton text="Update" onclick={(e) => handleOpenUpdate(row)} disabled={isFetching} type="button" />
-                                            <LocationUpdateForm open={openUpdate} onClose={handleCloseUpdate} />
-                                        </div></TableCell>
-                                        <TableCell><StyleButton text="Delete" onclick={(e) => handleDelete(row)} disabled={isFetching} type="button" /></TableCell>
+                                        <TableCell>
+                                            <div>
+                                                <StyleButton text="Update" onclick={(e) => handleOpenUpdate(row)}
+                                                             disabled={isFetching} type="button"/>
+                                                <LocationUpdateForm open={openUpdate} onClose={handleCloseUpdate}/>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell><StyleButton text="Delete" onclick={(e) => handleDelete(row)}
+                                                                disabled={isFetching} type="button"/></TableCell>
                                     </TableRow>
                                 )).reverse()}
                             </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}>
+                        }
+                    </Table>
+                </TableContainer>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
 
-                        <StyleButton text="Previous Page"
-                            disabled={isFetching || locationPage === 0}
-                            type="button"
-                            onclick={() => { if (locationPage > 0) { dispatch(setLocationPage(locationPage - 1)); dispatch(getLocation(locationPage - 1)) } }} />
-                        <label style={{
-                            fontFamily: "Undertale",
-                            backgroundColor: '#855666',
-                            color: '#332127'
-                        }}>
-                            {locationPage}
-                        </label>
-                        <StyleButton text="Next Page"
-                            disabled={isFetching}
-                            type="button"
-                            onclick={() => { dispatch(setLocationPage(locationPage + 1)); dispatch(getLocation(locationPage + 1)) }} />
-                    </Box>
-                </Box>
-            </>
-        );
-    } else {
-        return (
-            <>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
-                    {isAuth && <div>
-                        <StyleButton text="Create location" onclick={handleOpenCreate} disabled={isFetching} type="button" />
-                        <LocationForm open={openCreate} onClose={handleCloseCreate} />
-                    </div>}
-                    <TableContainer className='main__table-container' sx={{ maxWidth: '100%', overflowX: 'auto' }}>
-                        <Table className="main__table" aria-label="data table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>X</TableCell>
-                                    <TableCell>Y</TableCell>
-                                    <TableCell>Z</TableCell>
-                                    <TableCell>Admin Can Modify</TableCell>
-                                    <TableCell>User</TableCell>
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    </TableContainer>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
+                    <StyleButton text="Previous Page"
+                                 disabled={isFetching || locationPage === 0}
+                                 type="button"
+                                 onclick={() => {
+                                     if (locationPage > 0) {
+                                         dispatch(setLocationPage(locationPage - 1));
+                                         dispatch(getLocation(locationPage - 1))
+                                     }
+                                 }}/>
+                    <label style={{
+                        fontFamily: "Undertale",
+                        backgroundColor: '#855666',
+                        color: '#332127'
                     }}>
-
-                        <StyleButton text="Previous Page"
-                            disabled={isFetching || locationPage === 0}
-                            type="button"
-                            onclick={() => { if (locationPage > 0) { dispatch(setLocationPage(locationPage - 1)); dispatch(getLocation(locationPage - 1)) } }} />
-                        <label style={{
-                            fontFamily: "Undertale",
-                            backgroundColor: '#855666',
-                            color: '#332127'
-                        }}>
-                            {locationPage}
-                        </label>
-                        <StyleButton text="Next Page"
-                            disabled={isFetching}
-                            type="button"
-                            onclick={() => { dispatch(setLocationPage(locationPage + 1)); dispatch(getLocation(locationPage + 1)) }} />
-                    </Box>
+                        {locationPage}
+                    </label>
+                    <StyleButton text="Next Page"
+                                 disabled={isFetching}
+                                 type="button"
+                                 onclick={() => {
+                                     dispatch(setLocationPage(locationPage + 1));
+                                     dispatch(getLocation(locationPage + 1))
+                                 }}/>
                 </Box>
-            </>
-        );
-    }
+            </Box> }
+        </>
+    );
 }
 
 

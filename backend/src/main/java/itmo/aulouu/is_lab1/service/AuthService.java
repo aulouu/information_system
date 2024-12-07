@@ -1,12 +1,14 @@
 package itmo.aulouu.is_lab1.service;
 
+import itmo.aulouu.is_lab1.dao.UserRepository;
+import itmo.aulouu.is_lab1.dto.AuthResponseDTO;
+import itmo.aulouu.is_lab1.dto.LoginUserDTO;
+import itmo.aulouu.is_lab1.dto.RegisterUserDTO;
 import itmo.aulouu.is_lab1.exceptions.UserAlreadyExistException;
 import itmo.aulouu.is_lab1.exceptions.UserNotFoundException;
+import itmo.aulouu.is_lab1.model.Role;
+import itmo.aulouu.is_lab1.model.User;
 import itmo.aulouu.is_lab1.security.jwt.JwtUtils;
-import itmo.aulouu.is_lab1.dao.*;
-import itmo.aulouu.is_lab1.dto.*;
-import itmo.aulouu.is_lab1.model.*;
-import itmo.aulouu.is_lab1.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

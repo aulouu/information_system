@@ -1,26 +1,28 @@
 package itmo.aulouu.is_lab1.service;
 
 import itmo.aulouu.is_lab1.Pagification;
-import itmo.aulouu.is_lab1.dao.*;
-import itmo.aulouu.is_lab1.dto.coordinates.*;
-import itmo.aulouu.is_lab1.dto.location.*;
-import itmo.aulouu.is_lab1.dto.person.*;
+import itmo.aulouu.is_lab1.dao.CoordinatesRepository;
+import itmo.aulouu.is_lab1.dao.LocationRepository;
+import itmo.aulouu.is_lab1.dao.PersonRepository;
+import itmo.aulouu.is_lab1.dao.UserRepository;
+import itmo.aulouu.is_lab1.dto.coordinates.CoordinatesDTO;
+import itmo.aulouu.is_lab1.dto.location.LocationDTO;
+import itmo.aulouu.is_lab1.dto.person.AlterPersonDTO;
+import itmo.aulouu.is_lab1.dto.person.CreatePersonDTO;
+import itmo.aulouu.is_lab1.dto.person.PersonDTO;
+import itmo.aulouu.is_lab1.exceptions.*;
 import itmo.aulouu.is_lab1.model.*;
 import itmo.aulouu.is_lab1.security.jwt.JwtUtils;
-import itmo.aulouu.is_lab1.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -221,7 +223,7 @@ public class PersonService {
     }
 
     public List<PersonDTO> getCountByEyeColor(Color eyeColor) {
-        List<Person> persons =  personRepository.findCountByEyeColor(eyeColor);
+        List<Person> persons = personRepository.findCountByEyeColor(eyeColor);
         return persons
                 .stream()
                 .map(this::toPersonDTO)

@@ -13,17 +13,17 @@ import lombok.Setter;
 @Setter
 public class CreateLocationDTO {
 
-   private double x;
+    private double x;
 
-   @NotNull
-   private Integer y;
+    @NotNull
+    private Integer y;
 
-   private double z;
+    private double z;
 
-   @NotBlank
-   @NotNull
-   private String name;
+    @NotBlank
+    @NotNull
+    private String name;
 
-   @NotNull
-   private Boolean adminCanModify;
+    @NotNull
+    private Boolean adminCanModify;
 }

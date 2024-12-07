@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class AuthResponseDTO {
+    private final String tokenType = "Bearer ";
     private String username;
     private Role role;
     private String token;
-    private final String tokenType = "Bearer ";
 
     public AuthResponseDTO(String username, Role role, String token) {
         this.username = username;

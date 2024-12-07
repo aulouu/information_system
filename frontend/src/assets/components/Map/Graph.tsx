@@ -1,13 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { appSelector, IPerson, setUpdatedPerson } from "../../../storage/Slices/AppSlice";
-import { AppDispatch } from '../../../storage/store';
-import { PersonArray } from '../Person/PersonTable';
+import {useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {IPerson, setUpdatedPerson} from "../../../storage/Slices/AppSlice";
+import {AppDispatch} from '../../../storage/store';
+import {PersonArray} from '../Person/PersonTable';
 import PersonInfo from './PersonInfo.tsx';
 
 
-
-export default function Graph({ points, persons }: { points: number[][], persons: PersonArray }) {
+export default function Graph({points, persons}: { points: number[][], persons: PersonArray }) {
     const dispatch = useDispatch<AppDispatch>();
     const [open, setOpen] = useState(false);
 
@@ -52,7 +51,7 @@ export default function Graph({ points, persons }: { points: number[][], persons
             };
         }
         // Возвращаем значения по умолчанию, если нет точек
-        return { xmin: -100, xmax: 100, ymin: -100, ymax: 100 };
+        return {xmin: -100, xmax: 100, ymin: -100, ymax: 100};
     }
 
     // Используем функцию для инициализации состояния bounds
@@ -70,7 +69,7 @@ export default function Graph({ points, persons }: { points: number[][], persons
             const canvasY = event.clientY - rect.top;
             const graphX = (canvasX / scaleX) + bounds.xmin;
             const graphY = bounds.ymax - (canvasY / scaleY);
-            setCursorPosition({ x: graphX, y: graphY });
+            setCursorPosition({x: graphX, y: graphY});
         };
 
         const boundsAreValid = Math.abs(bounds.xmin) === Math.abs(bounds.xmax) && Math.abs(bounds.ymin) === Math.abs(bounds.ymax);
@@ -78,7 +77,7 @@ export default function Graph({ points, persons }: { points: number[][], persons
         if (boundsAreValid) {
             canvas.addEventListener('mousemove', handleMouseMove);
         } else {
-            setCursorPosition({ x: 0, y: 0 });
+            setCursorPosition({x: 0, y: 0});
         }
 
         return () => {
@@ -96,7 +95,12 @@ export default function Graph({ points, persons }: { points: number[][], persons
         drawGraph(context, bounds);
     }, [points]);
 
-    const drawGraph = (ctx: CanvasRenderingContext2D | null, bounds: { xmin: any; xmax: any; ymin: any; ymax: any; }) => {
+    const drawGraph = (ctx: CanvasRenderingContext2D | null, bounds: {
+        xmin: any;
+        xmax: any;
+        ymin: any;
+        ymax: any;
+    }) => {
         if (!ctx) return;
         const scaleX = width / (bounds.xmax - bounds.xmin);
         const scaleY = height / (bounds.ymax - bounds.ymin);
@@ -161,7 +165,7 @@ export default function Graph({ points, persons }: { points: number[][], persons
             const colorMap: { [key: number]: string } = {};
             points.forEach(point => {
                 if (!colorMap[point[3]]) {
-                    colorMap[point[3]] = `hsl(${point[3] * 20}, 100%, 50%)`;
+                    colorMap[point[3]] = `hsl(${point[3] * 30}, 100%, 50%)`;
                 }
 
                 ctx.fillStyle = colorMap[point[3]];
@@ -169,7 +173,6 @@ export default function Graph({ points, persons }: { points: number[][], persons
                 const y = offsetY - (point[1] * scaleY);
                 ctx.beginPath(); // Начинаем новый путь для каждой точки
                 ctx.arc(x, y, 2 * point[2], 0, 2 * Math.PI); // Рисуем круг
-
 
 
                 ctx.fill();
@@ -185,15 +188,15 @@ export default function Graph({ points, persons }: { points: number[][], persons
         drawGraph(context, bounds);
     }, [bounds]);
 
-    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    const [cursorPosition, setCursorPosition] = useState({x: 0, y: 0});
 
     return (
-        <div className="graph" >
+        <div className="graph">
             <div className="center-container">
-                <canvas ref={canvasRef} width={width} height={height} onClick={handleGraphClick} />
+                <canvas ref={canvasRef} width={width} height={height} onClick={handleGraphClick}/>
             </div>
             <p>X: {cursorPosition.x.toFixed(2)}, Y: {cursorPosition.y.toFixed(2)}</p>
-            <div><PersonInfo open={open} onClose={handleClose} /></div>
+            <div><PersonInfo open={open} onClose={handleClose}/></div>
 
         </div>
     );

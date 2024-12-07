@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 public class AlterCoordinatesDTO {
 
-   private int x;
+    private int x;
 
-   @Min(-290)
-   private int y;
+    @Min(-290)
+    private int y;
 
-   @NotNull
-   private Boolean adminCanModify;
+    @NotNull
+    private Boolean adminCanModify;
 }

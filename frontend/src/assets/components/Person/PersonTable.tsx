@@ -1,13 +1,13 @@
 import {
+    Box,
+    SortDirection,
+    Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Table,
-    Box,
-    TextField,
-    SortDirection
+    TextField
 } from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -19,7 +19,7 @@ import {
     setUpdatedPerson
 } from "../../../storage/Slices/AppSlice";
 import {AppDispatch} from '../../../storage/store';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import StyleButton from '../StyleButton';
 import PersonForm from './PersonForm';
 import PersonUpdateForm from './PersonUpdateForm';
@@ -191,17 +191,17 @@ export default function PersonTable() {
 
     return (
         <>
-            <Box sx={{
+            {isAuth && <Box sx={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 overflowX: 'hidden',
                 flexDirection: 'column'
             }}>
-                {isAuth && <div>
+                <div>
                     <StyleButton text="Create person" onclick={handleOpenCreate} disabled={isFetching} type="button"/>
                     <PersonForm open={openCreate} onClose={handleCloseCreate}/>
-                </div>}
+                </div>
                 <TableContainer className='main__table-container'>
                     <Table className="main__table" aria-label="data table" sx={{maxWidth: '100%', overflowX: 'auto'}}>
                         <TableHead>
@@ -283,7 +283,7 @@ export default function PersonTable() {
                                      dispatch(getPerson(personPage + 1))
                                  }}/>
                 </Box>
-            </Box>
+            </Box> }
         </>
     );
 }

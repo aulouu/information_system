@@ -7,9 +7,11 @@ public enum Country {
     SOUTH_KOREA("SOUTH_KOREA"),
     NORTH_KOREA("NORTH_KOREA");
     private final String countryName;
+
     Country(String countryName) {
         this.countryName = countryName;
     }
+
     public String getCountryName() {
         return countryName;
     }

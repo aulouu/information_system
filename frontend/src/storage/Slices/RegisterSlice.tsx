@@ -1,29 +1,33 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
-import { RootState } from "../store";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axios, {AxiosError} from "axios";
+import {RootState} from "../store";
+
 interface UserSignupData {
     username: string;
     password: string;
 }
+
 interface SignupState {
     isFetching: boolean;
     isSuccess: boolean;
     isError: boolean;
     errorMessage: string;
 }
+
 interface SignupResponse {
     username: string,
     role: string,
     token: string,
     tokenType: string;
 }
+
 export const signupUser = createAsyncThunk<
     SignupResponse,
     UserSignupData,
     { rejectValue: string }
 >(
     "users/signupUser",
-    async ({ username, password }, thunkAPI) => {
+    async ({username, password}, thunkAPI) => {
         try {
             const link = "http://localhost:24680/auth/register";
             const params = {
@@ -31,7 +35,7 @@ export const signupUser = createAsyncThunk<
                 password
             };
             const response = await axios.post<SignupResponse>(link, params, {
-                headers: { "Content-Type": "application/json", }
+                headers: {"Content-Type": "application/json",}
             });
             const data = response.data;
             if (response.status === 200) {
@@ -85,6 +89,6 @@ export const SignupSlice = createSlice({
             });
     }
 });
-export const { clearState } = SignupSlice.actions;
+export const {clearState} = SignupSlice.actions;
 export const signupSelector = (state: RootState) => state.signup;
 export default SignupSlice.reducer;

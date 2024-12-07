@@ -1,13 +1,25 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableRow, Table, Box, TextField, SortDirection } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { appSelector, getImport, getMovie, getUserRole, IImport, sendDeleteImport, sendDeleteMovie, setImportPage, setMoviePage, setUpdatedMovie } from "../../storage/Slices/AppSlice";
-import { AppDispatch } from '../../storage/store';
-import { useEffect, useState } from 'react';
+import {
+    Box,
+    SortDirection,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField
+} from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {appSelector, getImport, IImport, sendDeleteImport, setImportPage} from "../../storage/Slices/AppSlice";
+import {AppDispatch} from '../../storage/store';
+import {useState} from 'react';
 import StyleButton from './StyleButton';
+
 export enum OperationStatus {
     SUCCESS = "SUCCESS",
     ERROR = "ERROR"
 }
+
 interface Import {
     id: number;
     importTime: string;
@@ -18,7 +30,7 @@ interface Import {
 export type ImportArray = Import[];
 export default function ImportHistoryTable() {
     const dispatch = useDispatch<AppDispatch>();
-    const { imports, isFetching, importPage, isAuth } = useSelector(appSelector);
+    const {imports, isFetching, importPage, isAuth} = useSelector(appSelector);
     const [filters, setFilters] = useState<{ [key: string]: string }>({});
     const [activeColumn, setActiveColumn] = useState<string | null>(null);
     const [sortConfig, setSortConfig] = useState<{ field: keyof Import | null; direction: SortDirection }>({
@@ -27,13 +39,13 @@ export default function ImportHistoryTable() {
     });
     const handleDelete = (imports: IImport) => {
         const timer = setTimeout(() => {
-            dispatch(sendDeleteImport({ id: imports.id }));
+            dispatch(sendDeleteImport({id: imports.id}));
         }, 50);
     };
     const handleColumnClick = (columnName: string) => {
         setActiveColumn(activeColumn === columnName ? null : columnName);
         if (activeColumn === columnName) {
-            const newFilters = { ...filters };
+            const newFilters = {...filters};
             delete newFilters[columnName];
             setFilters(newFilters);
             return;
@@ -93,7 +105,7 @@ export default function ImportHistoryTable() {
                 position: 'relative',
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
                 {label}
                 {sortConfig.field === columnName && (
                     <span>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
@@ -120,9 +132,15 @@ export default function ImportHistoryTable() {
     const sortedAndFilteredData = getSortedAndFilteredData();
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflowX: 'hidden', flexDirection: 'column' }}>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflowX: 'hidden',
+                flexDirection: 'column'
+            }}>
                 <TableContainer className='main__table-container'>
-                    <Table className="main__table" aria-label="data table" sx={{ maxWidth: '100%', overflowX: 'auto' }}>
+                    <Table className="main__table" aria-label="data table" sx={{maxWidth: '100%', overflowX: 'auto'}}>
                         <TableHead>
                             <TableRow>
                                 {renderTableHeader('id', 'ID')}
@@ -143,7 +161,8 @@ export default function ImportHistoryTable() {
                                         <TableCell>{String(row.importedCount)}</TableCell>
                                         <TableCell>{String(row.userId)}</TableCell>
                                         <TableCell>
-                                            <StyleButton text="Delete" onclick={(e) => handleDelete(row)} disabled={isFetching} type="button" />
+                                            <StyleButton text="Delete" onclick={(e) => handleDelete(row)}
+                                                         disabled={isFetching} type="button"/>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -160,12 +179,17 @@ export default function ImportHistoryTable() {
                         text="Previous Page"
                         disabled={isFetching || importPage === 0}
                         type="button"
-                        onclick={() => { if (importPage > 0) { dispatch(setImportPage(importPage - 1)); dispatch(getImport(importPage - 1)) } }}
+                        onclick={() => {
+                            if (importPage > 0) {
+                                dispatch(setImportPage(importPage - 1));
+                                dispatch(getImport(importPage - 1))
+                            }
+                        }}
                     />
                     <label style={{
                         fontFamily: "Undertale",
-                        backgroundColor: 'black',
-                        color: 'white'
+                        backgroundColor: '#855666',
+                        color: 'black'
                     }}>
                         {importPage}
                     </label>
@@ -173,7 +197,10 @@ export default function ImportHistoryTable() {
                         text="Next Page"
                         disabled={isFetching}
                         type="button"
-                        onclick={() => { dispatch(setImportPage(importPage + 1)); dispatch(getImport(importPage + 1)) }}
+                        onclick={() => {
+                            dispatch(setImportPage(importPage + 1));
+                            dispatch(getImport(importPage + 1))
+                        }}
                     />
                 </Box>
             </Box>

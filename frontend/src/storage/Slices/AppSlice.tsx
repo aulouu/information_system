@@ -1,12 +1,11 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios, {AxiosError} from "axios";
 import {RootState} from "../store";
-import {Color, Nationality} from "../../assets/components/Person/PersonTable";
+import {Color, Nationality, PersonArray} from "../../assets/components/Person/PersonTable";
 
 import {LocationsArray} from "../../assets/components/Location/LocationTable";
 import {CoordinatesArray} from "../../assets/components/Coordinates/CoordinatesTable";
 import {AdminRequestArray} from "../../assets/components/Admin/AdminRequestTable";
-import {PersonArray} from "../../assets/components/Person/PersonTable";
 import {ImportArray, OperationStatus} from "../../assets/components/ImportHistoryTable";
 
 export interface ICoordinate {
@@ -1129,11 +1128,9 @@ export const AppSlice = createSlice({
                 state.isError = true;
                 if (action?.payload?.status == 500) {
                     state.errorMessage = "You have no rights to commit this!";
-                }
-                else if (action?.payload?.status == 400) {
+                } else if (action?.payload?.status == 400) {
                     state.errorMessage = "Invalid parameters!";
-                }
-                else {
+                } else {
                     state.errorMessage = (action.payload as { data?: string }).data || "An error occurred";
                 }
             })
@@ -1145,8 +1142,20 @@ export const AppSlice = createSlice({
 
 
 export const {
-    clearState, clearAllStates, setCoordinatesPage, setUpdatedCoordinate, setLocationPage, setUpdatedLocation,
-    setPersonPage, setUpdatedPerson, setAdminRequestPage, setFetching, setError, setErrorMessage, setSuccess, setImportPage
+    clearState,
+    clearAllStates,
+    setCoordinatesPage,
+    setUpdatedCoordinate,
+    setLocationPage,
+    setUpdatedLocation,
+    setPersonPage,
+    setUpdatedPerson,
+    setAdminRequestPage,
+    setFetching,
+    setError,
+    setErrorMessage,
+    setSuccess,
+    setImportPage
 } = AppSlice.actions;
 
 

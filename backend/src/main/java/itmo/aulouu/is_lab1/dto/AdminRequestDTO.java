@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminRequestDTO {
-   private Long id;
+    private Long id;
 
-   private String username;
-   
+    private String username;
+
 }

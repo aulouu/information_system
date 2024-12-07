@@ -1,6 +1,8 @@
 package itmo.aulouu.is_lab1.controller;
 
-import itmo.aulouu.is_lab1.dto.location.*;
+import itmo.aulouu.is_lab1.dto.location.AlterLocationDTO;
+import itmo.aulouu.is_lab1.dto.location.CreateLocationDTO;
+import itmo.aulouu.is_lab1.dto.location.LocationDTO;
 import itmo.aulouu.is_lab1.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,26 +16,26 @@ import java.util.List;
 @RequestMapping("/location")
 @RequiredArgsConstructor
 public class LocationController {
-   private final LocationService locationService;
+    private final LocationService locationService;
 
-   @GetMapping
-   public List<LocationDTO> getLocations(@RequestParam int from, @RequestParam int size) {
-      return locationService.getLocations(from, size);
-   }
+    @GetMapping
+    public List<LocationDTO> getLocations(@RequestParam int from, @RequestParam int size) {
+        return locationService.getLocations(from, size);
+    }
 
-   @PostMapping
-   public LocationDTO createLocation(@RequestBody @Valid CreateLocationDTO createLocationDTO, HttpServletRequest request) {
-      return locationService.createLocation(createLocationDTO, request);
-   }
+    @PostMapping
+    public LocationDTO createLocation(@RequestBody @Valid CreateLocationDTO createLocationDTO, HttpServletRequest request) {
+        return locationService.createLocation(createLocationDTO, request);
+    }
 
-   @PatchMapping("/{locationId}")
-   public LocationDTO alterLocation(@PathVariable Long locationId, @RequestBody @Valid AlterLocationDTO alterLocationDTO,
-         HttpServletRequest request) {
-      return locationService.alterLocation(locationId, alterLocationDTO, request);
-   }
+    @PatchMapping("/{locationId}")
+    public LocationDTO alterLocation(@PathVariable Long locationId, @RequestBody @Valid AlterLocationDTO alterLocationDTO,
+                                     HttpServletRequest request) {
+        return locationService.alterLocation(locationId, alterLocationDTO, request);
+    }
 
-   @DeleteMapping("/{locationId}")
-   public void deleteLocation(@PathVariable Long locationId, HttpServletRequest request) {
-      locationService.deleteLocation(locationId, request);
-   }
+    @DeleteMapping("/{locationId}")
+    public void deleteLocation(@PathVariable Long locationId, HttpServletRequest request) {
+        locationService.deleteLocation(locationId, request);
+    }
 }

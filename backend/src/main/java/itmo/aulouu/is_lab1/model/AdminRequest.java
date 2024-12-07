@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "admin_request")
 public class AdminRequest {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @OneToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "user_id")
-   private User user;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

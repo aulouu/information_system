@@ -59,16 +59,19 @@ public class ImportController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping
     public List<ImportHistoryDTO> getImportHistory(@RequestParam int from, @RequestParam int size,
                                                    HttpServletRequest request) {
         return importService.getImportHistory(from, size, request);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteImportHistory(@PathVariable Long id, HttpServletRequest request) {
         importService.deleteImportHistory(id, request);
         return ResponseEntity.ok("Import history deleted");
     }
+
     private User findUserByRequest(HttpServletRequest request) {
         String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.parseJwt(request));
         return userRepository.findByUsername(username)

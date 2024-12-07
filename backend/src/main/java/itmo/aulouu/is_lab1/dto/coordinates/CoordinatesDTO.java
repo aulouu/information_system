@@ -8,9 +8,9 @@ import lombok.Getter;
 @Getter
 @Builder(toBuilder = true)
 public class CoordinatesDTO {
-   private Long id;
-   private int x;
-   private int y;
-   private Boolean adminCanModify;
-   private String userName;
+    private Long id;
+    private int x;
+    private int y;
+    private Boolean adminCanModify;
+    private String userName;
 }

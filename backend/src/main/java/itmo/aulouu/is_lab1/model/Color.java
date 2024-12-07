@@ -5,9 +5,11 @@ public enum Color {
     RED("RED"),
     ORANGE("ORANGE");
     private final String colorName;
+
     Color(String colorName) {
         this.colorName = colorName;
     }
+
     public String getColorName() {
         return colorName;
     }

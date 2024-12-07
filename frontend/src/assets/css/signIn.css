@@ -1,17 +1,17 @@
 
 body {
-   margin: 0;
-   place-items: center;
-   min-width: 320px;
-   min-height: 100vh;
- }
- 
- 
- span.MuiTypography-root{
-   font-family: "Undertale", serif;
- }
- 
- /* Десктопный */
+    margin: 0;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+
+span.MuiTypography-root {
+    font-family: "Undertale", serif;
+}
+
+/* Десктопный */
 @media only screen and (min-width: 1258px) {
 
 }
@@ -24,10 +24,10 @@ body {
 
 /* Мобильный */
 @media only screen and (max-width: 869px) {
-  body {
-    margin: 0;
-    place-items: center;
-    max-width: 400px;
-    min-height: 50vh;
-  }
+    body {
+        margin: 0;
+        place-items: center;
+        max-width: 400px;
+        min-height: 50vh;
+    }
 }

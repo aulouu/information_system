@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-   private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-   public Role getRoleByUsername(String username) {
-      User user = userRepository.findByUsername(username)
+    public Role getRoleByUsername(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("Username %s not found", username)
                 ));
         return user.getRole();
-   }
+    }
 
 }

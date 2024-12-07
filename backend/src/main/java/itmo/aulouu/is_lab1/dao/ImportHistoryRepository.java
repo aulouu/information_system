@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ImportHistoryRepository extends JpaRepository<ImportHistory, Long> {
     Page<ImportHistory> findAllByUser(User user, Pageable pageable);
+
     Page<ImportHistory> findAll(Pageable pageable);
+
     Optional<ImportHistory> findById(Long id);
 }

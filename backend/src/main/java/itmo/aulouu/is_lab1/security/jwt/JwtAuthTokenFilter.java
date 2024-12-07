@@ -22,53 +22,52 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
-   @Autowired
-   private JwtUtils jwtUtils;
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
+    @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
+    private AuthUserDetailsService userDetailsService;
 
-   @Autowired
-   private AuthUserDetailsService userDetailsService;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            UserDetails userDetails = getUserDetails(request);
 
-   private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
+            if (userDetails != null) {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
 
-   @Override
-   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-         throws ServletException, IOException {
-      try {
-         UserDetails userDetails = getUserDetails(request);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-         if (userDetails != null) {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                  userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (Exception e) {
+            logger.error("Cannot set user authentication: { }", e);
+        }
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        filterChain.doFilter(request, response);
+    }
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-         }
-      } catch (Exception e) {
-         logger.error("Cannot set user authentication: { }", e);
-      }
+    public UserDetails getUserDetails(HttpServletRequest request) {
+        String jwt = parseJwt(request);
 
-      filterChain.doFilter(request, response);
-   }
+        if (jwt == null || !jwtUtils.validateJwtToken(jwt))
+            return null;
 
-   public UserDetails getUserDetails(HttpServletRequest request) {
-      String jwt = parseJwt(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-      if (jwt == null || !jwtUtils.validateJwtToken(jwt))
-          return null;
+        return userDetailsService.loadUserByUsername(username);
+    }
 
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
+    public String parseJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+        String bearerPrefix = "Bearer ";
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(bearerPrefix)) {
+            return headerAuth.substring(bearerPrefix.length());
+        }
 
-      return userDetailsService.loadUserByUsername(username);
-  }
-
-  public String parseJwt(HttpServletRequest request) {
-   String headerAuth = request.getHeader("Authorization");
-   String bearerPrefix = "Bearer ";
-   if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(bearerPrefix)){
-       return headerAuth.substring(bearerPrefix.length());}
-
-   return null;
-}
+        return null;
+    }
 
 }

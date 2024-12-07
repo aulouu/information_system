@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/user")
 public class UserController {
-   private final UserService userService;
+    private final UserService userService;
 
-   @GetMapping("/role/{username}")
-   public Role getRoleByUsername(@PathVariable String username) {
-      return userService.getRoleByUsername(username);
-   }
+    @GetMapping("/role/{username}")
+    public Role getRoleByUsername(@PathVariable String username) {
+        return userService.getRoleByUsername(username);
+    }
 }

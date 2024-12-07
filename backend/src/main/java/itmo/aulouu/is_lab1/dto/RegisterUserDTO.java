@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RegisterUserDTO {
-   @NotBlank
-   @Size(min=6, max=20)
-   private String username;
+    @NotBlank
+    @Size(min = 6, max = 20)
+    private String username;
 
-   @NotBlank
-   @Size(min=6, max=20)
-   private String password;
+    @NotBlank
+    @Size(min = 6, max = 20)
+    private String password;
 }

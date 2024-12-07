@@ -1,16 +1,17 @@
 import http from 'k6/http';
-import { check, group, fail, sleep } from 'k6';
-import { SharedArray } from 'k6/data';
+import {check, fail, group, sleep} from 'k6';
+import {SharedArray} from 'k6/data';
 import exec from 'k6/execution';
+
 export const options = {
     scenarios: {
         concurrent_users: {
             executor: 'ramping-vus',
             startVUs: 0,
             stages: [
-                { duration: '10s', target: 2 },
-                { duration: '20s', target: 2 },
-                { duration: '1s', target: 0 },
+                {duration: '10s', target: 2},
+                {duration: '20s', target: 2},
+                {duration: '1s', target: 0},
             ],
         },
     },
@@ -23,10 +24,11 @@ const importFileContent = open('./person.yaml', 'b');
 const SHARED_PERSON_NAME = 'SharedPerson';
 const testUsers = new SharedArray('users', function () {
     return [
-        { username: 'userTest1', password: 'UserTest1' },
-        { username: 'userTest2', password: 'UserTest2' },
+        {username: 'userTest1', password: 'UserTest1'},
+        {username: 'userTest2', password: 'UserTest2'},
     ];
 });
+
 function importPersons(token, fileContent) {
     const payload = {
         file: http.file(fileContent, "person.yaml"),
@@ -38,12 +40,13 @@ function importPersons(token, fileContent) {
         timeout: "60s",
     });
 }
+
 function login(username, password) {
     const loginRes = http.post(`${BASE_URL}/auth/login`, JSON.stringify({
         username: username,
         password: password,
     }), {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         timeout: '10s',
     });
     if (!check(loginRes, {
@@ -53,6 +56,7 @@ function login(username, password) {
     }
     return loginRes.json('token');
 }
+
 export function setup() {
     const token = login(testUsers[0].username, testUsers[0].password);
     const coordinates = createCoordinates(token);
@@ -60,7 +64,7 @@ export function setup() {
     const responses = testUsers.map(user => {
         const token = login(user.username, user.password);
         const response = createPerson(token, SHARED_PERSON_NAME, coordinates.json('id'), location.json('id'));
-        return { user, token, response };
+        return {user, token, response};
     });
     const successfulCreations = responses.filter(r => r.response.status === 200);
     if (successfulCreations.length === 0) {
@@ -72,24 +76,29 @@ export function setup() {
         locationId: location.json('id'),
     };
 }
+
 function createCoordinates(token) {
-    const coordinates = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), adminCanModify: true };
+    const coordinates = {x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), adminCanModify: true};
     return http.post(`${BASE_URL}/coordinates`, JSON.stringify(coordinates), {
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
         timeout: '10s',
     });
 }
+
 function createLocation(token) {
-    const location = { name: 'Location ' + Math.floor(Math.random() * 10),
+    const location = {
+        name: 'Location ' + Math.floor(Math.random() * 10),
         x: Math.floor(Math.random() * 10),
         y: Math.floor(Math.random() * 10),
         z: Math.floor(Math.random() * 10),
-        adminCanModify: true };
+        adminCanModify: true
+    };
     return http.post(`${BASE_URL}/location`, JSON.stringify(location), {
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
         timeout: '10s',
     });
 }
+
 function generateRandomBirthday() {
     const start = new Date(1900, 0, 1); // Начальная дата
     const end = new Date(); // Текущая дата
@@ -101,6 +110,7 @@ function generateRandomBirthday() {
 
     return `${day}.${month}.${year}`;
 }
+
 function createPerson(token, personName, coordinatesId, locationId) {
     const person = {
         name: personName,
@@ -121,6 +131,7 @@ function createPerson(token, personName, coordinatesId, locationId) {
         timeout: '10s',
     });
 }
+
 export default function (data) {
     let personId = data.sharedPersonId;
     const coordinatesId = data.coordinatesId;
@@ -154,8 +165,7 @@ export default function (data) {
         if (response.status !== 200 && response.status !== 400) {
             console.log(response.status + "Update Shared Person");
             console.log(response.json());
-        }
-        else{
+        } else {
             personId = response.json('id');
         }
     });

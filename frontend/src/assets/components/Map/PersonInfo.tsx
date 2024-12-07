@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Box,
-    TextField,
-    Modal,
-    Checkbox,
-} from '@mui/material';
+import {Box, Checkbox, Modal, TextField,} from '@mui/material';
 
 import {appSelector} from "../../../storage/Slices/AppSlice";
 import {useDispatch, useSelector} from 'react-redux';
@@ -127,7 +122,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Name (Not NULL)'
                     />
                     <TextField
@@ -148,7 +143,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                         }}
                         value={formData.coordinatesId}
                         color='primary'
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                     />
                     <TextField
                         margin="dense"
@@ -167,7 +162,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Eye Color'
                     />
                     <TextField
@@ -187,7 +182,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Hair Color'
                     />
                     <TextField
@@ -208,7 +203,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                         }}
                         value={formData.locationId}
                         color='primary'
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                     />
                     <TextField
                         margin="dense"
@@ -227,7 +222,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Height'
                     />
                     <TextField
@@ -247,7 +242,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Birthday'
                     />
                     <TextField
@@ -267,7 +262,7 @@ const PersonInfoForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                                 readOnly: true,
                             },
                         }}
-                        sx={{ color: 'white', mb: 1, WebkitTextFillColor: 'white' }}
+                        sx={{color: 'white', mb: 1, WebkitTextFillColor: 'white'}}
                         placeholder='Nationality'
                     />
                     <Box sx={{

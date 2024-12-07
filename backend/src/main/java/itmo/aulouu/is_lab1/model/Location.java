@@ -15,27 +15,27 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Location implements Serializable{
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+public class Location implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @Column(name = "x")
-   private double x;
+    @Column(name = "x")
+    private double x;
 
-   @Column(name = "y", nullable = false)
-   private Integer y;
+    @Column(name = "y", nullable = false)
+    private Integer y;
 
-   @Column(name = "z")
-   private double z;
+    @Column(name = "z")
+    private double z;
 
-   @Column(name = "name", nullable = false)
-   private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-   @Column(name = "admin_can_modify", nullable = false)
-   private Boolean adminCanModify;
+    @Column(name = "admin_can_modify", nullable = false)
+    private Boolean adminCanModify;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "user_id")
-   private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

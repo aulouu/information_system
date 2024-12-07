@@ -1,6 +1,7 @@
 package itmo.aulouu.is_lab1.dto.person;
 
-import itmo.aulouu.is_lab1.model.*;
+import itmo.aulouu.is_lab1.model.Color;
+import itmo.aulouu.is_lab1.model.Country;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -16,31 +17,31 @@ import java.util.Date;
 @Getter
 @Setter
 public class CreatePersonDTO {
-   @NotBlank
-   @NotNull
-   private String name;
+    @NotBlank
+    @NotNull
+    private String name;
 
-   @NotNull
-   @Positive  
-   private Long coordinatesId;
+    @NotNull
+    @Positive
+    private Long coordinatesId;
 
-   private Color eyeColor;
+    private Color eyeColor;
 
-   private Color hairColor;
+    private Color hairColor;
 
-   @NotNull
-   @Positive
-   private Long locationId;
+    @NotNull
+    @Positive
+    private Long locationId;
 
-   @NotNull
-   @Positive
-   private Integer height;
+    @NotNull
+    @Positive
+    private Integer height;
 
-   @NotNull
-   private Date birthday;
+    @NotNull
+    private Date birthday;
 
-   private Country nationality;
+    private Country nationality;
 
-   @NotNull
-   private Boolean adminCanModify;
+    @NotNull
+    private Boolean adminCanModify;
 }

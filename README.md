@@ -1,1 +1,1 @@
-# Information systems / Lab №1
+# Information systems / Labs

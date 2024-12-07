@@ -20,7 +20,7 @@ export const options = {
     },
 };
 const BASE_URL = 'http://localhost:24680';
-const importFileContent = open('./person.yaml', 'b');
+const importFileContent = open('./persons.yaml', 'b');
 const SHARED_PERSON_NAME = 'SharedPerson';
 const testUsers = new SharedArray('users', function () {
     return [
@@ -31,7 +31,7 @@ const testUsers = new SharedArray('users', function () {
 
 function importPersons(token, fileContent) {
     const payload = {
-        file: http.file(fileContent, "person.yaml"),
+        file: http.file(fileContent, "persons.yaml"),
     };
     return http.post(`${BASE_URL}/import`, payload, {
         headers: {

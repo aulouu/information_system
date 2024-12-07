@@ -1,0 +1,35 @@
+persons:
+  - name: rip
+    coordinates:
+      x: 6
+      y: 10
+      adminCanModify: false
+    eyeColor: ORANGE
+    hairColor: RED
+    location:
+      name: new
+      x: 46
+      y: 9
+      z: -3
+      adminCanModify: false
+    height: 150
+    birthday: 16-11-2006
+    nationality: RUSSIA
+    adminCanModify: false
+  - name: ded
+    coordinates:
+      x: 3
+      y: 13
+      adminCanModify: true
+    eyeColor: GREEN
+    hairColor: ORANGE
+    location:
+      name: new
+      x: 46
+      y: 9
+      z: -3
+      adminCanModify: false
+    height: 150
+    birthday: 12-03-2001
+    nationality: CHINA
+    adminCanModify: true

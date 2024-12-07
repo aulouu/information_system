@@ -22,6 +22,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -193,12 +195,14 @@ public class ImportService {
     private Person parseAndSavePerson(HashMap<String, Object> personData, User user, boolean inner) {
         if (!personData.containsKey("name")
                 || !personData.containsKey("coordinates")
+                || !personData.containsKey("eyeColor")
+                || !personData.containsKey("hairColor")
                 || !personData.containsKey("location")
                 || !personData.containsKey("height")
                 || !personData.containsKey("birthday")
                 || !personData.containsKey("adminCanModify")) {
             throw new IllegalArgumentException(
-                    "Person data is missing. Name, coordinates, location, height, birthday and adminCanModify are required");
+                    "Person data is missing. Name, coordinates, eyeColor, hairColor, location, height, birthday and adminCanModify are required");
         }
         HashMap<String, Object> coordData = (HashMap<String, Object>) personData.get("coordinates");
         Coordinates coordinates = parseAndSaveCoordinate(coordData, user, true);
@@ -234,9 +238,14 @@ public class ImportService {
             if (personData.get("birthday") == null) {
                 throw new IllegalArgumentException("Birthday cannot be null");
             }
-            birthday = (Date) personData.get("birthday");
+//            birthday = (Date) personData.get("birthday");
+            String birthdayStr = personData.get("birthday").toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            birthday = dateFormat.parse(birthdayStr);
         } catch (ClassCastException e) {
             throw new IllegalArgumentException("Invalid data type for birthday. Expected a Date format dd-MM-yyyy.", e);
+        } catch (ParseException e) {
+            throw new RuntimeException("Failed to parse birthday date", e);
         }
         Country nationality;
         try {

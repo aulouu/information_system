@@ -5,7 +5,7 @@ coordinates:
   - x: 4
     y: 5
     adminCanModify: false
-locations:
+location:
   - name: lol
     x: 3
     y: 3
@@ -29,14 +29,14 @@ persons:
       adminCanModify: false
     eyeColor: GREEN
     hairColor: RED
-    locations:
+    location:
       name: lol
       x: 3
       y: 3
       z: 3
       adminCanModify: false
     height: 165
-    birthday: 20.01.2004
+    birthday: 20-01-2004
     nationality: RUSSIA
     adminCanModify: false
   - name: ok
@@ -46,13 +46,13 @@ persons:
       adminCanModify: false
     eyeColor: ORANGE
     hairColor: GREEN
-    locations:
+    location:
       name: kek
       x: -3
       y: 43
       z: 65
       adminCanModify: true
     height: 160
-    birthday: 21.05.2000
+    birthday: 21-05-2000
     nationality: CHINA
     adminCanModify: true

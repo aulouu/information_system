@@ -56,7 +56,7 @@ function ImportFile() {
                     display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px',
                     textAlign: 'center', borderColor: 'white', borderWidth: '6px', borderStyle: 'solid',
                 }}>
-                    <img src="/public/error.png" style={{width: '50px', height: '45px'}}/>
+                    <img src="/error.png" style={{width: '50px', height: '45px'}}/>
                     <Typography variant="h6" color="white" fontFamily="Undertale" sx={{mt: 4}}>You are not authorized to
                         import files</Typography>
                 </Box>}

@@ -1,0 +1,35 @@
+persons:
+  - name: yyy
+    coordinates:
+      x: 5
+      y: 11
+      adminCanModify: false
+    eyeColor: ORANGE
+    hairColor: RED
+    location:
+      name: gg
+      x: 44
+      y: 10
+      z: -4
+      adminCanModify: false
+    height: 154
+    birthday: 16-11-2006
+    nationality: RUSSIA
+    adminCanModify: false
+  - name: www
+    coordinates:
+      x: 4
+      y: 18
+      adminCanModify: true
+    eyeColor: GREEN
+    hairColor: ORANGE
+    location:
+      name: ne
+      x: 64
+      y: 32
+      z: -2
+      adminCanModify: false
+    height: 153
+    birthday: 12-03-2001
+    nationality: CHINA
+    adminCanModify: true

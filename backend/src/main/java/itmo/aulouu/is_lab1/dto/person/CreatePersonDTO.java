@@ -38,7 +38,7 @@ public class CreatePersonDTO {
     private Integer height;
 
     @NotNull
-    private Date birthday;
+    private String birthday;
 
     private Country nationality;
 

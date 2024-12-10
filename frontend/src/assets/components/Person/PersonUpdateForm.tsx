@@ -20,8 +20,8 @@ interface FormData {
     hairColor: Color | null;
     locationId: string;
     height: string;
-    birthday: Date;
-    // birthday: string;
+    // birthday: Date;
+    birthday: string;
     nationality: Nationality | null;
     adminCanModify: boolean;
 }
@@ -52,8 +52,8 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
         hairColor: '' as Color,
         locationId: '',
         height: '',
-        birthday: '' as Date,
-        // birthday: '',
+        // birthday: '' as Date,
+        birthday: '',
         nationality: '' as Nationality,
         adminCanModify: false
     });
@@ -68,10 +68,13 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
             hairColor: formData.hairColor === '' ? null : formData.hairColor,
             locationId: formData.locationId === '' ? null : Number(formData.locationId),
             height: formData.height === '' ? null : Number(formData.height),
-            birthday: formData.birthday === '' ? null : new Date(formData.birthday),
+            // birthday: formData.birthday === '' ? null : new Date(formData.birthday),
+            birthday: formData.birthday === '' ? null : formData.birthday,
             nationality: formData.nationality === '' ? null : formData.nationality,
             adminCanModify: formData.adminCanModify
         };
+        console.log(formData);
+        console.log(newData);
         dispatch(sendUpdatedPerson(newData as IUpdatePerson));
     };
 
@@ -280,7 +283,8 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
 
                     <Input
                         margin="dense"
-                        type='date'
+                        // type='date'
+                        type='text'
                         required
                         fullWidth
                         id="birthday"
@@ -290,8 +294,8 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                         value={formData.birthday}
                         onChange={handleChange}
                         sx={{color: 'white', mb: 1}}
-                        inputProps={{min: '1900-01-01'}}
-                        placeholder='Birthday'
+                        // inputProps={{min: '1900-01-01'}}
+                        placeholder='Birthday (format dd.mm.yyyy)'
                     />
 
                     <TextField
@@ -340,7 +344,7 @@ const PersonUpdateForm: React.FC<CoordinateFormProps> = ({open, onClose}) => {
                     </Box>
 
 
-                    <StyleButton text="Create Person"
+                    <StyleButton text="Update Person"
                                  disabled={isFetching}
                                  type="submit"/>
                 </Box>

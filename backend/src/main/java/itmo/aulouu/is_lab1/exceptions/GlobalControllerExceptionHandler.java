@@ -1,5 +1,6 @@
 package itmo.aulouu.is_lab1.exceptions;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -108,6 +109,13 @@ public class GlobalControllerExceptionHandler {
     public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
         return new ErrorResponse(
                 e.getClass().getCanonicalName(),
+                e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlePSQLException(PSQLException e) {
+        return new ErrorResponse(e.getClass().getCanonicalName(),
                 e.getMessage());
     }
 

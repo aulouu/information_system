@@ -29,7 +29,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = Exception.class, propagation = Propagation.NESTED)
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class ImportService {
     private final CoordinatesRepository coordinatesRepository;
     private final LocationRepository locationRepository;

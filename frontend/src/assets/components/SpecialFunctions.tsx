@@ -412,8 +412,8 @@ export default function SpecialFunctionsTable() {
                             value={birthdayDate}
                             onChange={(e) => setBirthdayDate(e.target.value)}
                             sx={{color: 'white', mb: 1}}
-                            inputProps={{min: 0}}
-                            placeholder='Birthday Date'
+                            // inputProps={{min: 0}}
+                            placeholder='Birthday Date (format: dd.mm.yyyy)'
                         />
                         <TableContainer className='main__table-container' sx={{maxWidth: '100%', overflowX: 'auto'}}>
                             <Table className="main__table" aria-label="data table">

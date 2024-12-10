@@ -37,7 +37,7 @@ public class AlterPersonDTO {
     private Integer height;
 
     @NotNull
-    private Date birthday;
+    private String birthday;
 
     private Country nationality;
 

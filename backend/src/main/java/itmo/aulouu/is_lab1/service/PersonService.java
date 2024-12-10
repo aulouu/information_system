@@ -20,9 +20,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -30,10 +33,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import org.postgresql.util.PSQLException;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class, propagation = Propagation.NESTED)
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class PersonService {
     private final PersonRepository personRepository;
     private final CoordinatesRepository coordinatesRepository;
@@ -71,18 +75,45 @@ public class PersonService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public Coordinates findCoordinatesById(Long id) {
+        return coordinatesRepository.findById(id)
+                .orElseThrow(() -> new CoordinatesNotFoundException(
+                        String.format("Coordinates with id %s not found", id)));
+    }
+
+    @Transactional(readOnly = true)
+    public Location findLocationById(Long id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException(
+                        String.format("Location with id %s not found", id)));
+    }
+
+    @Retryable(value = { PSQLException.class }, maxAttempts = 4, backoff = @Backoff(delay = 100, multiplier = 2))
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public PersonDTO createPerson(CreatePersonDTO createPersonDTO, HttpServletRequest request) {
         if (personRepository.existsByName(createPersonDTO.getName()))
             throw new PersonAlreadyExistException(String.format("Person %s already exists", createPersonDTO.getName()));
-        Coordinates coordinate = coordinatesRepository.findById(createPersonDTO.getCoordinatesId())
-                .orElseThrow(() -> new CoordinatesNotFoundException(
-                        String.format("Coordinates with id %s not found", createPersonDTO.getCoordinatesId())));
-
-        Location location = locationRepository.findById(createPersonDTO.getLocationId())
-                .orElseThrow(() -> new LocationNotFoundException(
-                        String.format("Location with id %s not found", createPersonDTO.getLocationId())));
+//        Coordinates coordinate = coordinatesRepository.findById(createPersonDTO.getCoordinatesId())
+//                .orElseThrow(() -> new CoordinatesNotFoundException(
+//                        String.format("Coordinates with id %s not found", createPersonDTO.getCoordinatesId())));
+        Coordinates coordinate = findCoordinatesById(createPersonDTO.getCoordinatesId());
+//        Location location = locationRepository.findById(createPersonDTO.getLocationId())
+//                .orElseThrow(() -> new LocationNotFoundException(
+//                        String.format("Location with id %s not found", createPersonDTO.getLocationId())));
+        Location location = findLocationById(createPersonDTO.getLocationId());
 
         User user = findUserByRequest(request);
+
+        // Преобразование строки в объект Date
+        Date birthday;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            dateFormat.setLenient(false); // Жёсткая проверка формата
+            birthday = dateFormat.parse(createPersonDTO.getBirthday());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Please enter a valid date for Birthday in the format dd.mm.yyyy");
+        }
 
         Person person = Person
                 .builder()
@@ -93,7 +124,7 @@ public class PersonService {
                 .hairColor(createPersonDTO.getHairColor())
                 .location(location)
                 .height(createPersonDTO.getHeight())
-                .birthday(createPersonDTO.getBirthday())
+                .birthday(birthday)
                 .nationality(createPersonDTO.getNationality())
                 .adminCanModify(createPersonDTO.getAdminCanModify())
                 .user(user)
@@ -105,6 +136,7 @@ public class PersonService {
         return toPersonDTO(person);
     }
 
+    @Retryable(value = { PSQLException.class }, maxAttempts = 4, backoff = @Backoff(delay = 100, multiplier = 2))
     public PersonDTO alterPerson(Long personId, AlterPersonDTO alterPersonDTO, HttpServletRequest request) {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new PersonNotFoundException(
@@ -117,9 +149,10 @@ public class PersonService {
             person.setName(alterPersonDTO.getName());
 
         if (alterPersonDTO.getCoordinatesId() != null) {
-            Coordinates coordinates = coordinatesRepository.findById(alterPersonDTO.getCoordinatesId())
-                    .orElseThrow(() -> new CoordinatesNotFoundException(
-                            String.format("Coordinates with id %s not found", alterPersonDTO.getCoordinatesId())));
+//            Coordinates coordinates = coordinatesRepository.findById(alterPersonDTO.getCoordinatesId())
+//                    .orElseThrow(() -> new CoordinatesNotFoundException(
+//                            String.format("Coordinates with id %s not found", alterPersonDTO.getCoordinatesId())));
+            Coordinates coordinates = findCoordinatesById(alterPersonDTO.getCoordinatesId());
             person.setCoordinates(coordinates);
         }
 
@@ -128,9 +161,10 @@ public class PersonService {
         person.setHairColor(alterPersonDTO.getHairColor());
 
         if (alterPersonDTO.getLocationId() != null) {
-            Location location = locationRepository.findById(alterPersonDTO.getLocationId())
-                    .orElseThrow(() -> new LocationNotFoundException(
-                            String.format("Location with id %s not found", alterPersonDTO.getLocationId())));
+//            Location location = locationRepository.findById(alterPersonDTO.getLocationId())
+//                    .orElseThrow(() -> new LocationNotFoundException(
+//                            String.format("Location with id %s not found", alterPersonDTO.getLocationId())));
+            Location location = findLocationById(alterPersonDTO.getLocationId());
             person.setLocation(location);
         }
 
@@ -138,8 +172,18 @@ public class PersonService {
             person.setHeight(alterPersonDTO.getHeight());
         }
 
+        // Преобразование строки в объект Date
+        Date birthday;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            dateFormat.setLenient(false); // Жёсткая проверка формата
+            birthday = dateFormat.parse(alterPersonDTO.getBirthday());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Please enter a valid date for Birthday in the format dd.mm.yyyy");
+        }
+
         if (alterPersonDTO.getBirthday() != null) {
-            person.setBirthday(alterPersonDTO.getBirthday());
+            person.setBirthday(birthday);
         }
 
         person.setNationality(alterPersonDTO.getNationality());
@@ -152,6 +196,7 @@ public class PersonService {
         return toPersonDTO(person);
     }
 
+    @Retryable(value = { PSQLException.class }, maxAttempts = 4, backoff = @Backoff(delay = 100, multiplier = 2))
     public void deletePerson(Long personId, HttpServletRequest request) {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new PersonNotFoundException(

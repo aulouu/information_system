@@ -114,6 +114,7 @@ export interface IImport {
     importTime: string;
     importedCount: number;
     userId: number;
+    fileUrl: string;
 };
 
 interface AppState {

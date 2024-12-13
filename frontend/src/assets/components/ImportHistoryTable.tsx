@@ -26,6 +26,7 @@ interface Import {
     status: OperationStatus;
     importedCount: number;
     userId: number;
+    fileUrl: string;
 };
 export type ImportArray = Import[];
 export default function ImportHistoryTable() {
@@ -147,7 +148,8 @@ export default function ImportHistoryTable() {
                                 {renderTableHeader('importTime', 'Import Time')}
                                 {renderTableHeader('status', 'Import Status')}
                                 {renderTableHeader('importedCount', 'Imported Count')}
-                                {renderTableHeader('userId', 'User ID')}
+                                {renderTableHeader('user', 'User')}
+                                <TableCell>File</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
@@ -160,6 +162,9 @@ export default function ImportHistoryTable() {
                                         <TableCell>{String(row.status)}</TableCell>
                                         <TableCell>{String(row.importedCount)}</TableCell>
                                         <TableCell>{String(row.userId)}</TableCell>
+                                        <TableCell>{<a href={row.fileUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'orange' }}>
+                                            {row.fileUrl ? "View File" : "No File"}
+                                        </a>}</TableCell>
                                         <TableCell>
                                             <StyleButton text="Delete" onclick={(e) => handleDelete(row)}
                                                          disabled={isFetching} type="button"/>

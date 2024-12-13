@@ -16,4 +16,5 @@ public class ImportHistoryDTO {
     private LocalDateTime importTime;
     private int importedCount;
     private Long userId;
+    private String fileUrl;
 }

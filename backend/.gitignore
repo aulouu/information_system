@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/minio-data
+/src/main/resources/application.properties

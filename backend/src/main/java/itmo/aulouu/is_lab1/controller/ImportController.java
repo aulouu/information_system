@@ -41,6 +41,7 @@ public class ImportController {
             importHistory.setUser(user);
             importHistory.setImportTime(LocalDateTime.now());
             importHistory.setImportedCount(0);
+            importHistory.setFileUrl(null);
             importHistoryRepository.save(importHistory);
             simpMessagingTemplate.convertAndSend("/topic", "Import failed");
             return ResponseEntity.badRequest().body("File is empty");
@@ -52,6 +53,7 @@ public class ImportController {
         } catch (Exception e) {
             importHistory.setStatus(OperationStatus.FAILURE);
             importHistory.setUser(user);
+            importHistory.setFileUrl(null);
             importHistory.setImportTime(LocalDateTime.now());
             importHistory.setImportedCount(0);
             importHistoryRepository.save(importHistory);

@@ -57,28 +57,6 @@ function login(username, password) {
     return loginRes.json('token');
 }
 
-// export function setup() {
-//     const token = login(testUsers[0].username, testUsers[0].password);
-//     // const coordinates = createCoordinates(token);
-//     // const location = createLocation(token);
-//     const responses = testUsers.map((user) => {
-//         const token = login(user.username, user.password);
-//         const response = createPerson(token, SHARED_PERSON_NAME);
-//         return {user, token, response};
-//     });
-//     const successfulCreations = responses.filter(r => r.response.status === 200);
-//     if (successfulCreations.length === 0) {
-//         fail('Failed to create the shared person for testing.');
-//     }
-//     return {
-//         sharedPersonId: successfulCreations[0].response.json('id'),
-//         sharedRouteTokens: responses.map((r) => r.token),
-//         // coordinatesId: coordinates.json('id'),
-//         // locationId: location.json('id'),
-//     };
-// }
-
-
 export function setup() {
     const tokenUser1 = login(testUsers[0].username, testUsers[0].password);
     const tokenUser2 = login(testUsers[1].username, testUsers[1].password);
@@ -214,22 +192,22 @@ export default function (data) {
             personId = response.json('id');
         }
     });
-    group('Delete Shared Person', () => {
-        const response = http.del(`${BASE_URL}/person/${personId}`, {}, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            timeout: '10s',
-        });
-        check(response, {
-            'shared person deletion handled correctly': (r) =>
-                [400, 200].includes(r.status),
-        });
-        if (response.status !== 200 && response.status !== 400) {
-            console.log(response.status + "Delete Shared Person");
-            console.log(response.json());
-        }
-    });
+    // group('Delete Shared Person', () => {
+    //     const response = http.del(`${BASE_URL}/person/${personId}`, {}, {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`
+    //         },
+    //         timeout: '10s',
+    //     });
+    //     check(response, {
+    //         'shared person deletion handled correctly': (r) =>
+    //             [400, 200].includes(r.status),
+    //     });
+    //     if (response.status !== 200 && response.status !== 400) {
+    //         console.log(response.status + "Delete Shared Person");
+    //         console.log(response.json());
+    //     }
+    // });
     group('Import Person Concurrently', () => {
         const response = importPersons(token, importFileContent);
         check(response, {

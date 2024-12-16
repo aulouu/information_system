@@ -10,11 +10,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>itmo.aulouu</groupId>
-    <artifactId>is_lab1</artifactId>
+    <artifactId>is</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>is_lab1</name>
-    <description>Information Systems Lab1</description>
+    <name>information_system</name>
+    <description>Information System Lab1</description>
     <properties>
         <java.version>17</java.version>
     </properties>

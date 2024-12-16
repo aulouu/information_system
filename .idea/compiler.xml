@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="is_lab1" />
+        <module name="is" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="is" options="-parameters" />
       <module name="is_lab1" options="-parameters" />
     </option>
   </component>

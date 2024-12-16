@@ -10,7 +10,7 @@ public class MinioConfig {
     @Value("${minio.url}")
     private String minioUrl;
 
-    @Value("${minio.access-key}")
+    @Value("${minio.secret-key}")
     private String accessKey;
 
     @Value("${minio.secret-key}")

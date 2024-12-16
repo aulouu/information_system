@@ -42,50 +42,14 @@ public class ImportService {
     private int importedCount = 0;
     private final MinioClient minioClient;
 
-    //    public void importFile(MultipartFile file, HttpServletRequest request) throws Exception {
-//        importedCount = 0;
-//        Yaml yaml = new Yaml();
-//        InputStream inputStream = file.getInputStream();
-//        HashMap<String, List<HashMap<String, Object>>> data = yaml.load(inputStream);
-//        User user = findUserByRequest(request);
-//        if (data.containsKey("coordinates")) {
-//            List<HashMap<String, Object>> coordinatesList = data.get("coordinates");
-//            if (coordinatesList == null) {
-//                throw new IllegalArgumentException("Coordinates list is empty");
-//            }
-//            for (HashMap<String, Object> coordData : coordinatesList) {
-//                parseAndSaveCoordinate(coordData, user, false);
-//            }
-//        }
-//        if (data.containsKey("locations")) {
-//            List<HashMap<String, Object>> locationsList = data.get("locations");
-//            if (locationsList == null) {
-//                throw new IllegalArgumentException("Locations list is empty");
-//            }
-//            for (HashMap<String, Object> locationData : locationsList) {
-//                parseAndSaveLocation(locationData, user, false);
-//            }
-//        }
-//        if (data.containsKey("persons")) {
-//            List<HashMap<String, Object>> personsList = data.get("persons");
-//            if (personsList == null) {
-//                throw new IllegalArgumentException("Persons list is empty");
-//            }
-//            for (HashMap<String, Object> personData : personsList) {
-//                parseAndSavePerson(personData, user, false);
-//            }
-//        }
-//        simpMessagingTemplate.convertAndSend("/topic", "Import completed");
-//        ImportHistory importHistory = ImportHistory.builder().user(user).importedCount(importedCount)
-//                .status(OperationStatus.SUCCESS).importTime(LocalDateTime.now()).build();
-//        importHistoryRepository.save(importHistory);
-//    }
     public void importFile(MultipartFile file, HttpServletRequest request) throws Exception {
         importedCount = 0;
         User user = findUserByRequest(request);
 
         ImportHistory importHistory = ImportHistory.builder().user(user).build();
         String userFileName = user.getUsername() + "_" + System.currentTimeMillis() + "/" + file.getOriginalFilename();
+
+        boolean simulateError = true;
 
         try {
             try (InputStream inputStream = file.getInputStream()) {
@@ -107,6 +71,10 @@ public class ImportService {
         } catch (MinioException e) {
             throw new Exception("Error uploading file to MinIO: " + e.getMessage());
         }
+
+//        if (simulateError) {
+//            throw new RuntimeException("Simulated business logic error");
+//        }
 
         try (InputStream inputStream = file.getInputStream()) {
             Yaml yaml = new Yaml();

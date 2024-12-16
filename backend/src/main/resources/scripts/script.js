@@ -192,22 +192,22 @@ export default function (data) {
             personId = response.json('id');
         }
     });
-    // group('Delete Shared Person', () => {
-    //     const response = http.del(`${BASE_URL}/person/${personId}`, {}, {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         },
-    //         timeout: '10s',
-    //     });
-    //     check(response, {
-    //         'shared person deletion handled correctly': (r) =>
-    //             [400, 200].includes(r.status),
-    //     });
-    //     if (response.status !== 200 && response.status !== 400) {
-    //         console.log(response.status + "Delete Shared Person");
-    //         console.log(response.json());
-    //     }
-    // });
+    group('Delete Shared Person', () => {
+        const response = http.del(`${BASE_URL}/person/${personId}`, {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            timeout: '10s',
+        });
+        check(response, {
+            'shared person deletion handled correctly': (r) =>
+                [400, 200].includes(r.status),
+        });
+        if (response.status !== 200 && response.status !== 400) {
+            console.log(response.status + "Delete Shared Person");
+            console.log(response.json());
+        }
+    });
     group('Import Person Concurrently', () => {
         const response = importPersons(token, importFileContent);
         check(response, {

@@ -12,7 +12,7 @@ persons:
       y: 9
       z: -3
       adminCanModify: false
-    height: 150
+    height: 30
     birthday: 16-11-2006
     nationality: RUSSIA
     adminCanModify: false
